@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            color: #333;
+            text-align: center;
+            background-image: url('https://example.com/snow-background.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .profile-container {
+            width: 350px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgb(208, 209, 255);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            margin-bottom: 10px;
+        }
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .profile-description {
+            font-size: 16px;
+            color: #555;
+            margin: 10px 0;
+        }
+        .profile-buttons button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: rgb(152, 154, 253);
+            color: white;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .profile-buttons button:hover {
+            background-color: rgb(118, 121, 254);
+        }
+        .modal {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 40%;
+        }
+        .modal textarea, .modal input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        .modal-buttons button {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .save-button {
+            background-color: rgb(152, 154, 253);
+            color: white;
+        }
+        .delete-button {
+            background-color: rgb(125, 127, 207);
+            color: white;
+        }
+        .snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        form div {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #444;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            transition: 0.1s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: rgb(152, 154, 253);
+            box-shadow: 0 0 8px rgba(152, 154, 253, 0.5);
+            outline: none;
+        }
+
+        input[type="file"] {
+            padding: 8px;
+            border: none;
+            background: white;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: linear-gradient(135deg, rgb(152, 154, 253), rgb(118, 121, 254));
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, rgb(118, 121, 254), rgb(92, 95, 255));
+            transform: scale(1.05);
+        }
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ffffff;
+            border-radius: 5px;
+            background: #f9f9f9;
+            cursor: pointer;
+        }
+
+        select:hover {
+            border-color: rgb(152, 154, 253);
+        }
+
+        select:focus {
+            border-color: rgb(92, 95, 255);
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+        }
+        .dives {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-family: Arial, sans-serif;
+            max-width: 300px;
+        }
+       
+    </style>
+    <script>
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</head>
+<body>
+    <div class="profile-container">
+        <form action="#" method="POST" enctype="multipart/form-data">
+            <div>
+                <label for="product-name">Назва товару</label>
+                <input type="text" id="product-name" name="product-name" placeholder="Введіть назву товару" required>
+            </div>
+            
+            <div>
+                <label for="product-description">Опис товару</label>
+                <textarea id="product-description" name="product-description" placeholder="Введіть опис товару" required></textarea>
+            </div>
+
+            <div class="dives">
+                <label for="product-name">Виберіть категорію товару</label>
+                <select name="categories">
+                    
+                    <option>Побут</option>
+                    <option>Нерухомість</option>
+                    <option>Транспорт</option>
+                    <option>Ігри</option>
+                    
+                </select>
+            </div>
+            
+            <div>
+                <label for="product-price">Ціна товару</label>
+                <input type="number" id="product-price" name="product-price" placeholder="Введіть ціну товару" required>
+            </div>
+    
+            <div>
+                <label for="product-image">Завантажити фото товару</label>
+                <input type="file" id="product-image" name="product-image" accept="image/*">
+            </div>
+
+            <div>
+                <label for="product-name">Звязок</label>
+                <input type="text" id="product-name" name="com" placeholder="Звязок з вами" required>
+            </div>
+            <button type="submit" class="btn-submit">Додати товар</button>
+        </form>
+    </div>
+    
+    
+    <canvas class="snow"></canvas>
+
+    <script>
+        // Додавання снігу
+        const canvas = document.querySelector('.snow');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const snowflakes = [];
+
+        function createSnowflakes() {
+            for (let i = 0; i < 100; i++) {
+                snowflakes.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 4 + 1,
+                    speed: Math.random() * 2 + 1,
+                });
+            }
+        }
+
+        function drawSnowflakes() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            snowflakes.forEach((flake) => {
+                ctx.moveTo(flake.x, flake.y);
+                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+            });
+            ctx.fill();
+        }
+
+        function updateSnowflakes() {
+            snowflakes.forEach((flake) => {
+                flake.y += flake.speed;
+                if (flake.y > canvas.height) {
+                    flake.y = -flake.radius;
+                    flake.x = Math.random() * canvas.width;
+                }
+            });
+        }
+
+        function animate() {
+            drawSnowflakes();
+            updateSnowflakes();
+            requestAnimationFrame(animate);
+        }
+
+        createSnowflakes();
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            snowflakes.length = 0;
+            createSnowflakes();
+        });
+    </script>
+</body>
+</html>

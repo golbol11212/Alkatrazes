@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            color: #333;
+            text-align: center;
+            background-image: url('https://example.com/snow-background.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .profile-container {
+            width: 350px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgb(208, 209, 255);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            margin-bottom: 10px;
+        }
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .profile-description {
+            font-size: 16px;
+            color: #555;
+            margin: 10px 0;
+        }
+        .profile-buttons button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: rgb(152, 154, 253);
+            color: white;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .profile-buttons button:hover {
+            background-color: rgb(118, 121, 254);
+        }
+        .modal {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 40%;
+        }
+        .modal textarea, .modal input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        .modal-buttons button {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .save-button {
+            background-color: rgb(152, 154, 253);
+            color: white;
+        }
+        .delete-button {
+            background-color: rgb(125, 127, 207);
+            color: white;
+        }
+        .snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: vertical;
+            transition: 0.1s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: rgb(152, 154, 253);
+            box-shadow: 0 0 8px rgba(152, 154, 253, 0.5);
+            outline: none;
+        }
+        .modal textarea, .modal input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</head>
+<body>  
+    
+    <div class="profile-container">
+        <img src= '{{ url_for("static", filename="img/"+user[3]) }}' class="profile-avatar">
+        <div class="profile-name" id="profile-name">
+            {% if login %}
+                <span> {{ login }} </span>
+                <span>[ {{ user[2] }} ] </span>
+            {% endif %}  
+        </div>
+        <div class="profile-description" id="profile-description">{{ user[4] }} </div>
+        <form method="post">
+            <div class="profile-buttons">
+                <button id="add-desc-img" >Изменить фото</button>
+                <div class="description-input" id="desc-img">
+                    <input type="file" id="product-image" name="product-image" accept="image/*">
+                </div>
+                <button id="add-desc-btn" >Добавить описание</button>
+                <div class="description-input" id="desc-input">
+                    <textarea id="product-description" name="product-description" placeholder="Введите описание..." required></textarea>
+                </div>
+                <button type="submit">Зберегти</button>
+                <j href="{{ url_for ('logindex')}}"><button>Повернутися</button></j>
+            </div>
+        </form>
+    </div>
+               
+    <canvas class="snow"></canvas>
+ 
+    
+    <script>
+
+        document.getElementById("add-desc-btn").addEventListener("click", function() {
+            let inputField = document.getElementById("desc-input");
+            inputField.style.display = inputField.style.display === "block" ? "none" : "block";
+        });
+        document.getElementById("add-desc-img").addEventListener("click", function() {
+            let inputField = document.getElementById("desc-img");
+            inputField.style.display = inputField.style.display === "block" ? "none" : "block";
+        });
+        // Додавання снігу
+         const canvas = document.querySelector('.snow');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const snowflakes = [];
+
+        function createSnowflakes() {
+            for (let i = 0; i < 100; i++) {
+                snowflakes.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 4 + 1,
+                    speed: Math.random() * 2 + 1,
+                });
+            }
+        }
+
+        function drawSnowflakes() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            snowflakes.forEach((flake) => {
+                ctx.moveTo(flake.x, flake.y);
+                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+            });
+            ctx.fill();
+        }
+
+        function updateSnowflakes() {
+            snowflakes.forEach((flake) => {
+                flake.y += flake.speed;
+                if (flake.y > canvas.height) {
+                    flake.y = -flake.radius;
+                    flake.x = Math.random() * canvas.width;
+                }
+            });
+        }
+
+        function animate() {
+            drawSnowflakes();
+            updateSnowflakes();
+            requestAnimationFrame(animate);
+        }
+
+        createSnowflakes();
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            snowflakes.length = 0;
+            createSnowflakes();
+        });
+    </script>
+    
+</body>
+</html>

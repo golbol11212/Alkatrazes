@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alkatrazes</title>
+    <style>
+        /* Reset styles for consistent appearance */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* General body styles with winter theme */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa; /* Light winter blue */
+            color: #333;
+            overflow-y: auto;
+            background-image: url('https://example.com/snow-background.jpg'); /* Winter background image */
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        /* Top header styles */
+        .header-top {
+            background-color: rgba(44, 62, 80, 0.9); /* Dark translucent background */
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px); /* Frosted glass effect */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-top .logo {
+            font-size: 26px;
+            font-weight: bold;
+            text-align: center;
+            flex: 1;
+            color: #f1c40f; /* Golden yellow */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .header-top .menu-toggle {
+            margin-right: auto;
+        }
+
+        /* User menu with avatar and name */
+        .header-top .user-menu {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            cursor: pointer;
+            background: rgb(152, 154, 253); /* Light frosted background */
+            padding: 5px 10px;
+            border-radius: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-top .user-menu img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        .header-top .user-menu span {
+            color: white;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        /* Bottom header styles */
+        .header-bottom {
+            background-color: rgba(52, 73, 94, 0.9); /* Dark translucent background */
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: -250px;
+            height: calc(100% - 120px);
+            width: 250px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: left 0.3s ease;
+            z-index: 999;
+            border-radius: 0 10px 10px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar .category {
+            padding: 12px;
+            background-color: rgba(129, 212, 250, 0.8);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            color: #01579b;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar .category:hover {
+            background-color: #0288d1;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Button for opening sidebar */
+        .menu-toggle {
+            background-color: rgb(152, 154, 253);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-toggle:hover {
+            background-color: rgb(140, 142, 251);
+        }
+
+        /* Main content styles */
+        .content {
+            margin-left: 20px;
+            padding: 20px;
+            color: #01579b;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .content h1 {
+            font-size: 36px;
+            text-align: center;
+        }
+
+        .content p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* Open sidebar animation */
+        .sidebar-open {
+            left: 0;
+        }
+
+        /* Snow overlay */
+        .snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .menu-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #6600cc;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .menu-button:hover {
+            background-color: #9933ff;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .menu {
+            position: absolute;
+            top: 60px;
+            right: 10px;
+            background-color: rgb(152, 154, 253);
+            border: 2px solid #ffffff;
+            border-radius: 10px;
+            padding: 10px;
+            display: none;
+            box-shadow: 0 4px 6px rgb(126, 128, 251);
+        }
+
+        .menu a {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .menu a:hover {
+            background-color: rgb(126, 128, 251);
+        }
+
+        
+        
+
+        .product-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgb(208, 209, 255);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            
+        }
+
+        .block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 10px;
+            background: #f0f0f0;
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .left-block {
+            width: 200px;
+            background: rgb(200, 201, 255);
+        }
+
+        .middle-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-grow: 1;
+            align-items: center;
+        }
+
+        .product-name-block {
+            background: #e6f7ff; /* Голубой фон */
+            width: 50%;
+            padding: 10px;
+        }
+
+        .description-block {
+            background: #fff4e6; /* Светло-оранжевый фон */
+            width: 100%;
+            padding: 10px;
+        }
+
+        .right-block {
+            width: 200px;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 120px;
+            background: #d9e2f3; /* Нежный фон */
+            border-radius: 8px;
+        }
+
+        .product-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .name {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .description {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .price {
+            font-size: 20px;
+            color: green;
+            font-weight: bold;
+        }
+
+        .categorys {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center;
+            background: rgb(200, 201, 255);
+            padding: 5px;
+            border-radius: 8px;
+            width: 20%;
+            
+        }
+
+        .contact-info {
+            text-align: center;
+            font-size: 14px;
+            color: #444;
+            margin-top: 5px;
+            background: #e8f5e9;
+            padding: 8px;
+            border-radius: 8px;
+            
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="header-top">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <div class="logo">Alkatrazes</div>
+        <button name="prof" class="user-menu" onclick="toggleMenu()">
+            <div class="menu" id="menu">
+                <a href="{{ url_for ('profil')}}"> Редагувати аккаунт</a>
+                <a href="#"> Корзина</a>
+                <a href="#"> Залишити відгук</a>
+                <a href="{{ url_for ('add_shop')}}"> Додати товар</a>
+                <a href="{{ url_for ('lod_out')}}"> Вихід</a>
+            </div>
+            <div class="user-menu" >
+                {% if user %}
+                    +
+                {% else %}
+                    -
+                {% endif %}
+                {% if login %}
+                    <span> {{ login }} </span>
+                {% endif %}   
+            </div>
+        </button>
+    </div>
+
+    <form method="post">
+        <div class="sidebar" id="sidebar">
+            
+            <div class="name">
+                Вибери категорії
+            </div>
+
+            <button type="submit" name="category" value="Нерухомість" class="category">Нерухомість</button>
+            <button type="submit" name="category" value="Транспорт" class="category">Авто</button>
+            <button type="submit" name="category" value="Побут" class="category">Побут</button>
+            <button type="submit" name="category" value="Ігри" class="category">Ігри</button>            
+        </div>
+    </form>
+    {% for post in sell %}
+        {% if post[4] == selected_category %}
+            <div class="categorys">{{ post[4] }}</div> <!-- Категория сверху -->
+            <div class="product-container">
+                <div class="block left-block">
+                    <div class="name">{{ post[1] }}</div> <!-- Имя -->
+                    <div class="image-container">
+                        <img src="{{ post[6] if post[6] else '/static/default-image.png' }}" alt="Изображение товара" class="product-image">
+                    </div>
+                </div>
+                <div class="middle-section">
+                    <div class="block product-name-block">
+                        <div class="product-name">{{ post[2] }}</div> <!-- Название товара -->
+                    </div>
+                    <div class="block description-block">
+                        <div class="description">{{ post[3] }}</div> <!-- Описание (в отдельном блоке) -->
+                    </div>
+                </div>
+                <div>
+                    <div class="block right-block">
+                        <div class="price">{{ post[5] }} грн</div> <!-- Цена (на месте описания) -->
+                    </div>
+                    <div class="block">
+                        <div>
+                            <p>{{ post[7] }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        {% endif %}
+        
+    {% endfor %}
+
+
+
+
+
+    <div class="header-bottom">
+        Footer Content &copy; 2025
+    </div>
+
+    
+    <canvas class="snow"></canvas>
+
+    <script>
+        // Toggles the sidebar's visibility
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('sidebar-open');
+        }
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+        
+        function createSnow() {
+            const canvas = document.querySelector('.snow');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const snowflakes = [];
+
+            // Creates a single snowflake with random properties
+            function createFlake() {
+                snowflakes.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 4 + 1,
+                    speed: Math.random() * 1 + 0.5,
+                });
+            }
+
+            // Updates snowflake positions and redraws them
+            function update() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                snowflakes.forEach((flake, i) => {
+                    flake.y += flake.speed;
+                    if (flake.y > canvas.height) {
+                        snowflakes.splice(i, 1);
+                        createFlake();
+                    }
+                    ctx.beginPath();
+                    ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'white';
+                    ctx.fill();
+                });
+                requestAnimationFrame(update);
+            }
+
+            // Initializes the snow effect with 100 snowflakes
+            for (let i = 0; i < 100; i++) {
+                createFlake();
+            }
+            update();
+        }
+
+        createSnow();
+    </script>
+</body>
+</html>

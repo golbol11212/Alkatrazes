@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item[2] }} - Alkatrazes</title>
+    <style>
+        :root {
+            --primary-color: #5B7BFE;    /* Інтенсивний синій */
+            --secondary-color: #6DD3A6;  /* Світлий аквамарин */
+            --accent-color: #FF8576;     /* Теплий кораловий */
+            --text-dark: #2D3748;        /* Глибокий сіро-синій */
+            --background-light: #F8FAFC; /* Світлий фон */
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), #7C93FF);
+        }
+
+        body {
+            background: var(--background-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-dark);
+        }
+
+        /* Хедер */
+        .header-top {
+            background: white;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Кнопка "Назад" */
+        .back-button {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .arrow {
+            color: var(--primary-color);
+            font-size: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover .arrow {
+            transform: translateX(-5px);
+            opacity: 0.8;
+        }
+
+        /* Логотип */
+        .logo {
+            font-size: 26px;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+            font-weight: 700;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        /* Профіль користувача */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 20px;
+            border-radius: 30px;
+            background: rgba(91, 123, 254, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .user-menu:hover .user-avatar {
+            border-color: var(--secondary-color);
+        }
+
+        .username {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Основний контент */
+        .item-details {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+            flex-grow: 1;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Галерея */
+        .gallery-section img {
+            width: 100%;
+            height: 500px;
+            object-fit: contain;
+            border-radius: 15px;
+            background: var(--background-light);
+            padding: 15px;
+        }
+
+        /* Блок інформації */
+        .info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Продавець */
+        .seller-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: var(--background-light);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .seller-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(91, 123, 254, 0.1);
+        }
+
+        .seller-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+        }
+
+        /* Ціна */
+        .price-tag {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            font-weight: 700;
+            margin: 15px 0;
+        }
+
+        /* Опис */
+        .description-box {
+            background: var(--background-light);
+            padding: 25px;
+            border-radius: 15px;
+            line-height: 1.7;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .description-text {
+            font-size: 1.1rem;
+            white-space: pre-wrap;
+            hyphens: auto;
+        }
+
+        /* Контакти */
+        .contact-box {
+            background: var(--gradient-primary);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 25px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .contact-box:hover {
+            transform: translateY(-2px);
+        }
+
+        .contact-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .contact-icon {
+            width: 30px;
+            height: 30px;
+            fill: var(--secondary-color);
+            filter: drop-shadow(0 2px 4px rgba(109, 211, 166, 0.3));
+        }
+
+        /* Футер */
+        .footer {
+            background: white;
+            color: var(--text-dark);
+            text-align: center;
+            padding: 20px;
+            margin-top: auto;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Адаптивність */
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .gallery-section img {
+                height: 300px;
+                padding: 10px;
+            }
+
+            .item-details {
+                margin: 15px;
+                padding: 20px;
+            }
+
+            .seller-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .price-tag {
+                font-size: 2rem;
+            }
+        }
+
+        /* Додаткові акценти */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--secondary-color) 50%, transparent 100%);
+            margin: 2rem 0;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding-left: 1rem;
+        }
+
+        .feature-list li::before {
+            content: "•";
+            color: var(--accent-color);
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
+        .comments-section {
+        margin: 30px 0;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .comment-form {
+            margin-bottom: 30px;
+        }
+
+        .comment-form textarea {
+            width: 97%;
+            padding: 15px;
+            border: 2px solid #81d4fa;
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 100px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .comment-form textarea:focus {
+            
+            border-color: #0288d1;
+            box-shadow: 0 0 8px rgba(2, 136, 209, 0.3);
+            outline: none;
+        }
+
+        .comment-form button {
+            background: #0288d1;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            float: right;
+        }
+
+        .comment-form button:hover {
+            background: #01579b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .comment {
+            
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #81d4fa;
+            border-radius: 6px;
+            animation: commentAppear 0.5s ease-out;
+            transform-origin: top;
+        }
+
+        @keyframes commentAppear {
+            0% {
+                opacity: 0;
+                transform: scaleY(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+        }
+
+        .comment-user {
+            color: #01579b;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .comment-text {
+            color: #333;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-top">
+        <a href="{{ url_for('logindex') }}" class="back-button">
+            <span class="arrow">←</span>
+        </a>
+        <div class="logo">Alkatrazes</div>
+        <div class="user-menu">
+            <img src='{{ url_for("static", filename="img/"+user[3]) }}' 
+                 class="user-avatar"
+                 alt="Аватар">
+            <span class="username">{{ login }}</span>
+        </div>
+    </header>
+
+    <main class="item-details">
+        <div class="product-grid">
+            <section class="gallery-section">
+                <img src='{{ url_for("static", filename="img/"+item[6]) }}' 
+                     alt="{{ item[2] }}">
+            </section>
+
+            <section class="info-section">
+                <article class="seller-card">
+                    <img src='{{ url_for("static", filename="img/"+seller[3]) }}' 
+                         class="seller-avatar"
+                         alt="Продавець">
+                    <div>
+                        <h2 class="seller-name">{{ seller[1] }}</h2>
+                        <p class="seller-status">Продавець</p>
+                    </div>
+                </article>
+
+                <h1 class="product-title">{{ item[2] }}</h1>
+
+                <div class="price-tag">
+                    {{ "{:,.0f}".format(item[5]|float) }} ₴
+                </div>
+
+                <article class="description-box">
+                    <h3 class="section-title">Опис товару</h3>
+                    <pre class="description-text">{{ item[3] }}</pre>
+                    <div class="divider"></div>
+                    
+                    <h3 class="section-title">Особливості</h3>
+                    <ul class="feature-list">
+                        <li>Висока якість матеріалів</li>
+                        <li>Гарантія 12 місяців</li>
+                        <li>Безкоштовна доставка</li>
+                    </ul>
+                </article>
+
+                {% if item[7] %}
+                <article class="contact-box">
+                    <div class="contact-content">
+                        <svg class="contact-icon" viewBox="0 0 24 24">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                        <p class="contact-info">{{ item[7] }}</p>
+                    </div>
+                </article>
+                {% endif %}
+            </section>
+        </div>
+        <div class="comments-section">
+            <h2>Коментарі ({{ comen|length }})</h2>
+            
+            {% if is_authorized %}
+            <form class="comment-form" method="POST">
+                <textarea name="comment" placeholder="Залишити коментар..." required></textarea>
+                <button type="submit">Відправити</button>
+            </form>
+            {% else %}
+            <div class="comment-auth-warning">
+                <p>Для залишення коментарів <a href="{{ url_for('open') }}">увійдіть</a> в систему</p>
+            </div>
+            {% endif %}
+        
+            <div class="comments-list">
+                {% for comment in comen %}
+                <div class="comment">
+                    <div class="comment-user">{{ comment[2] }}</div>
+                    <div class="comment-text">{{ comment[3] }}</div>
+                </div>
+                {% else %}
+                <div class="no-comments">Ще немає коментарів. Будьте першим!</div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2024 Alkatrazes. Всі права захищені</p>
+    </footer>
+</body>
+</html>
